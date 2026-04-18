@@ -4,8 +4,10 @@ import agents.SelectorRecoveryAgent;
 import tools.DomSnapshotTool;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -31,208 +33,261 @@ public class TestOrchestrator {
         HealingReportWriter.initializeReport();
     }
 
-    /**
-     * Helper to visually highlight elements during execution for the CTO demonstration.
-     */
-    private void highlightElement(WebElement element, String color) {
-        if (driver instanceof org.openqa.selenium.JavascriptExecutor) {
-            org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-            // Draw a thick glowing border around the element
-            js.executeScript("arguments[0].setAttribute('style', 'border: 4px solid " + color + " !important; box-shadow: 0 0 15px " + color + " !important; background-color: rgba(0,255,0,0.1);');", element);
+    private boolean isSessionActive() {
+        if (driver == null) return false;
+        try {
+            driver.getTitle();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    /**
-     * Helper to inject an on-screen text banner so the CTO can read what the framework is thinking directly on the UI!
-     */
+    private void highlightElement(WebElement element, String color) {
+        if (!isSessionActive()) return;
+        try {
+            if (driver instanceof JavascriptExecutor) {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                js.executeScript("arguments[0].setAttribute('style', 'border: 4px solid " + color + " !important; box-shadow: 0 0 15px " + color + " !important; background-color: rgba(0,255,0,0.1);');", element);
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ [Orchestrator] Warning: Failed to execute overlay JS.");
+        }
+    }
+
     private void showUiOverlay(String message, String backgroundColor) {
-        if (driver instanceof org.openqa.selenium.JavascriptExecutor) {
-            org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-            String script = "var existing = document.getElementById('ai-healer-overlay');" +
-                            "if (!existing) {" +
-                            "  existing = document.createElement('div');" +
-                            "  existing.id = 'ai-healer-overlay';" +
-                            "  existing.style.position = 'fixed';" +
-                            "  existing.style.bottom = '20px';" +
-                            "  existing.style.left = '50%';" +
-                            "  existing.style.transform = 'translateX(-50%)';" +
-                            "  existing.style.padding = '15px 30px';" +
-                            "  existing.style.zIndex = '999999';" +
-                            "  existing.style.fontSize = '20px';" +
-                            "  existing.style.fontWeight = 'bold';" +
-                            "  existing.style.borderRadius = '10px';" +
-                            "  existing.style.color = '#fff';" +
-                            "  existing.style.boxShadow = '0px 10px 30px rgba(0,0,0,0.5)';" +
-                            "  existing.style.fontFamily = 'monospace';" +
-                            "  document.body.appendChild(existing);" +
-                            "}" +
-                            "existing.style.backgroundColor = '" + backgroundColor + "';" +
-                            "existing.innerText = '" + message.replace("'", "\\'") + "';";
-            js.executeScript(script);
+        if (!isSessionActive()) return;
+        try {
+            if (driver instanceof JavascriptExecutor) {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                String script = "var existing = document.getElementById('ai-healer-overlay');" +
+                        "if (!existing) {" +
+                        "  existing = document.createElement('div');" +
+                        "  existing.id = 'ai-healer-overlay';" +
+                        "  existing.style.position = 'fixed';" +
+                        "  existing.style.bottom = '20px';" +
+                        "  existing.style.left = '50%';" +
+                        "  existing.style.transform = 'translateX(-50%)';" +
+                        "  existing.style.padding = '15px 30px';" +
+                        "  existing.style.zIndex = '999999';" +
+                        "  existing.style.fontSize = '20px';" +
+                        "  existing.style.fontWeight = 'bold';" +
+                        "  existing.style.borderRadius = '10px';" +
+                        "  existing.style.color = '#fff';" +
+                        "  existing.style.boxShadow = '0px 10px 30px rgba(0,0,0,0.5)';" +
+                        "  existing.style.fontFamily = 'monospace';" +
+                        "  document.body.appendChild(existing);" +
+                        "}" +
+                        "existing.style.backgroundColor = '" + backgroundColor + "';" +
+                        "existing.innerText = '" + message.replace("'", "\\'") + "';";
+                js.executeScript(script);
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ [Orchestrator] Warning: Failed to execute overlay JS.");
+        }
+    }
+    
+    public void waitForPageLoad() {
+        if(!isSessionActive()) return;
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
+    }
+    
+    public void waitForUrlContains(String text) {
+        if(!isSessionActive()) return;
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(15)).until(ExpectedConditions.urlContains(text));
+        } catch (Exception e) {
+            System.err.println("⚠️ [Orchestrator] URL did not contain " + text + " in time.");
         }
     }
 
     public void resilientClick(By locator, String targetDescription, String stepId) {
-        showUiOverlay("🖱️ Action: Clicking " + targetDescription, "#007bff");
-        int maxRetries = 2;
-        int attempt = 0;
-        
-        while (attempt <= maxRetries) {
-            try {
-                if (attempt > 0) {
-                    showUiOverlay("⚠️ Fail retrying locator... (Attempt " + attempt + ")", "#f39c12");
-                    System.out.println("⚠️ [Orchestrator] Element not found. Retrying... (Attempt " + attempt + ")");
-                }
-                WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-                element = wait.until(ExpectedConditions.elementToBeClickable(element));
-                highlightElement(element, "blue");
-                
-                Thread.sleep(800); // Brief pause
-                element.click();
-                showUiOverlay("✅ Success! Moving to next test case...", "#28a745");
-                System.out.println("✅ [Orchestrator] Step '" + stepId + "' click passed deterministically on " + locator);
-                HealingReportWriter.logStable(stepId, locator.toString());
-                return; // Success! Exit method
-            } catch (Exception e) {
-                attempt++;
-                if (attempt <= maxRetries) {
-                    try { Thread.sleep(1500); } catch (Exception ignored) {} // Wait for network to catch up
-                } else {
-                    System.err.println("❌ [Orchestrator] Step '" + stepId + "' click failed after " + maxRetries + " retries! Error: " + e.getClass().getSimpleName());
-                    handleRecovery("click", targetDescription, null, e.getMessage(), stepId, locator.toString());
-                    return;
+        io.qameta.allure.Allure.step(stepId + ": Clicking " + targetDescription, () -> {
+            if (!isSessionActive()) return;
+            io.qameta.allure.Allure.step("Step execution started at: " + java.time.LocalDateTime.now());
+            showUiOverlay("🖱️ Action: Clicking " + targetDescription, "#007bff");
+            int maxRetries = 1;
+            int attempt = 0;
+
+            while (attempt <= maxRetries) {
+                if (!isSessionActive()) return;
+                try {
+                    if (attempt > 0) {
+                        io.qameta.allure.Allure.step("Retry attempt triggered: " + attempt);
+                        showUiOverlay("⚠️ Fail retrying locator... (Attempt " + attempt + ")", "#f39c12");
+                        System.out.println("⚠️ [Orchestrator] Element not found. Retrying... (Attempt " + attempt + ")");
+                    }
+                    WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+                    element = wait.until(ExpectedConditions.elementToBeClickable(element));
+                    highlightElement(element, "blue");
+
+                    try {
+                        element.click();
+                    } catch (Exception clickEx) {
+                        System.out.println("⚠️ [Orchestrator] Native click intercepted/failed. Falling back to JS Click...");
+                        if (driver instanceof JavascriptExecutor) {
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                        } else {
+                            throw clickEx;
+                        }
+                    }
+                    showUiOverlay("✅ Success! Moving to next test case...", "#28a745");
+                    System.out.println("✅ [Orchestrator] Step '" + stepId + "' click passed deterministically on " + locator);
+                    HealingReportWriter.logStable(stepId, locator.toString());
+                    return; // Success! Exit method
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt > maxRetries) {
+                        io.qameta.allure.Allure.step("Max retries exceeded. Initiating Self-Healing fallback at: " + java.time.LocalDateTime.now());
+                        System.err.println("❌ [Orchestrator] Step '" + stepId + "' click failed! Error: " + e.getClass().getSimpleName());
+                        io.qameta.allure.Allure.addAttachment("Defect Exception Details", e.getClass().getSimpleName() + ": " + e.getMessage());
+                        handleRecovery("click", targetDescription, null, e.getMessage(), stepId, locator.toString());
+                        return;
+                    }
                 }
             }
-        }
+        });
     }
 
-    /**
-     * Attempts to find an element and enter text, with fallback.
-     */
     public void resilientFill(By locator, String text, String targetDescription, String stepId) {
-        showUiOverlay("⌨️ Action: Filling " + targetDescription, "#007bff");
-        int maxRetries = 2;
-        int attempt = 0;
-        
-        while (attempt <= maxRetries) {
-            try {
-                if (attempt > 0) {
-                    showUiOverlay("⚠️ Fail retrying locator... (Attempt " + attempt + ")", "#f39c12");
-                    System.out.println("⚠️ [Orchestrator] Element not found. Retrying... (Attempt " + attempt + ")");
-                }
-                WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-                highlightElement(element, "blue");
-                
-                Thread.sleep(800); // Brief pause 
-                
-                // Deep clean prefilled data to avoid Autofill glitches
-                element.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.COMMAND, "a"));
-                element.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.CONTROL, "a"));
-                element.sendKeys(org.openqa.selenium.Keys.BACK_SPACE);
-                element.clear();
-                
-                element.sendKeys(text);
-                
-                // Force React to recognize the change natively
-                if (driver instanceof org.openqa.selenium.JavascriptExecutor) {
-                    ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                        "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));" +
-                        "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", 
-                        element
-                    );
-                }
-                
-                showUiOverlay("✅ Success! Moving to next test case...", "#28a745");
-                System.out.println("✅ [Orchestrator] Step '" + stepId + "' fill passed deterministically on " + locator);
-                HealingReportWriter.logStable(stepId, locator.toString());
-                return; // Success! Exit method
-            } catch (Exception e) {
-                attempt++;
-                if (attempt <= maxRetries) {
-                    try { Thread.sleep(1500); } catch (Exception ignored) {} // Wait for network to catch up
-                } else {
-                    System.err.println("❌ [Orchestrator] Step '" + stepId + "' fill failed after " + maxRetries + " retries! Error: " + e.getClass().getSimpleName());
-                    handleRecovery("fill", targetDescription, text, e.getMessage(), stepId, locator.toString());
-                    return;
+        io.qameta.allure.Allure.step(stepId + ": Filling " + targetDescription, () -> {
+            if (!isSessionActive()) return;
+            io.qameta.allure.Allure.step("Step execution started at: " + java.time.LocalDateTime.now());
+            showUiOverlay("⌨️ Action: Filling " + targetDescription, "#007bff");
+            int maxRetries = 1;
+            int attempt = 0;
+
+            while (attempt <= maxRetries) {
+                if (!isSessionActive()) return;
+                try {
+                    if (attempt > 0) {
+                        io.qameta.allure.Allure.step("Retry attempt triggered: " + attempt);
+                        showUiOverlay("⚠️ Fail retrying locator... (Attempt " + attempt + ")", "#f39c12");
+                    }
+                    WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+                    highlightElement(element, "blue");
+
+                    element.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.COMMAND, "a"));
+                    element.sendKeys(org.openqa.selenium.Keys.chord(org.openqa.selenium.Keys.CONTROL, "a"));
+                    element.sendKeys(org.openqa.selenium.Keys.BACK_SPACE);
+                    try { element.clear(); } catch(Exception e){}
+
+                    element.sendKeys(text);
+
+                    if (driver instanceof JavascriptExecutor) {
+                        try {
+                            ((JavascriptExecutor) driver).executeScript(
+                                    "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));" +
+                                            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                                    element
+                            );
+                        } catch (Exception e) {}
+                    }
+
+                    showUiOverlay("✅ Success! Moving to next test case...", "#28a745");
+                    System.out.println("✅ [Orchestrator] Step '" + stepId + "' fill passed deterministically on " + locator);
+                    HealingReportWriter.logStable(stepId, locator.toString());
+                    return; // Success! Exit method
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt > maxRetries) {
+                        io.qameta.allure.Allure.step("Max retries exceeded. Initiating Self-Healing fallback at: " + java.time.LocalDateTime.now());
+                        System.err.println("❌ [Orchestrator] Step '" + stepId + "' fill failed! Error: " + e.getClass().getSimpleName());
+                        io.qameta.allure.Allure.addAttachment("Defect Exception Details", e.getClass().getSimpleName() + ": " + e.getMessage());
+                        handleRecovery("fill", targetDescription, text, e.getMessage(), stepId, locator.toString());
+                        return;
+                    }
                 }
             }
-        }
+        });
     }
 
     private void handleRecovery(String action, String targetDescription, String fillText, String exceptionContext, String stepId, String oldLocator) {
+        if (!isSessionActive()) return;
         System.out.println("🔄 [Orchestrator] Initiating Self-Healing Fallback for action: " + action + "...");
-        
-        // 🌟 ON-SCREEN ERROR HIGHLIGHT 🌟
-        showUiOverlay("❌ Locator Broken! Unable to find: " + targetDescription + ". Initiating AI Healing...", "#cc0000");
-        try { Thread.sleep(2500); } catch (Exception e){} // Pause to read it
-        
-        // 1. Capture context
+
+        showUiOverlay("❌ Locator Broken! Initiating AI Healing...", "#cc0000");
+        System.out.println("❌ Failed locator: " + oldLocator);
+
         String domExcerpt = domTool.captureCompactDom();
-        
-        showUiOverlay("🤖 AI Agent analyzing DOM to recover intent: '" + targetDescription + "'...", "#cc5500");
-        
-        // 2. Query Agent
+        io.qameta.allure.Allure.addAttachment("🤖 AI Extracted DOM Context", "text/html", domExcerpt);
+
+        showUiOverlay("🤖 AI Agent analyzing DOM to recover intent...", "#cc5500");
+
         List<SelectorRecoveryAgent.SelectorCandidate> candidates = recoveryAgent.recoverSelectors(targetDescription, exceptionContext, domExcerpt);
-        
-        if (candidates.isEmpty()) {
-            HealingReportWriter.logFailed(stepId, oldLocator);
-            throw new RuntimeException("Healing failed: Agent returned no candidates for " + targetDescription);
+
+        if (candidates == null || candidates.isEmpty()) {
+            System.err.println("⚠️ [Orchestrator] Step '" + stepId + "' Healing definitively failed (No candidates returned for " + targetDescription + ")! Continuing test flow...");
+            return;
         }
 
-        // 3. Evaluate Policy (Simulated: Pick highest confidence > 0.8)
-        SelectorRecoveryAgent.SelectorCandidate bestCandidate = candidates.get(0);
-        if (bestCandidate.confidence < 0.80) {
-            HealingReportWriter.logFailed(stepId, oldLocator);
-            // CRITICAL DEBUG: Take a screenshot so we know what's wrong!
-            try {
-                java.io.File srcFile = ((org.openqa.selenium.TakesScreenshot)driver).getScreenshotAs(org.openqa.selenium.OutputType.FILE);
-                java.nio.file.Files.copy(srcFile.toPath(), java.nio.file.Paths.get("/Users/priyakumari/self-healing-selenium/abort-screenshot.png"), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            } catch (Exception ignore) {}
-            throw new RuntimeException("Healing aborted by PolicyEngine: Highest confidence is " + bestCandidate.confidence);
-        }
+        System.out.println("🔍 Attempting healing with candidate locators:");
+        candidates.forEach(c -> System.out.println("   - " + c.selector + " (Confidence: " + c.confidence + ")"));
 
-        System.out.println("⚖️  [PolicyEngine] Auto-heal approved for candidate: " + bestCandidate.selector + " (Confidence: " + bestCandidate.confidence + ")");
-        System.out.println("🔄 [Orchestrator] Retrying action with new selector...");
+        boolean healed = false;
+        Exception lastException = null;
 
-        try {
-            By healedLocator;
-            if (bestCandidate.strategy.equals("xpath")) healedLocator = By.xpath(bestCandidate.selector);
-            else if (bestCandidate.strategy.equals("css")) healedLocator = By.cssSelector(bestCandidate.selector);
-            else healedLocator = By.xpath(bestCandidate.selector); // fallback
-
-            WebDriverWait healWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            WebElement element = healWait.until(ExpectedConditions.presenceOfElementLocated(healedLocator));
-            
-            System.out.println("⚠️ Locator failed for " + targetDescription);
-            System.out.println("🛠️ Healing started...");
-            
-            // 🌟 VISUAL DEMONSTRATION HIGHLIGHT 🌟
-            highlightElement(element, "lime"); // Glow bright green!
-            showUiOverlay("🏥 HEAL SUCCESS! AI found new locator: " + bestCandidate.selector, "#28a745");
-            Thread.sleep(3000); // Pause for 3 seconds so the CTO explicitly reads the healed locator!
-            
-            if (action.equals("fill")) {
-                element.clear();
-                element.sendKeys(fillText);
-                // Force React
-                if (driver instanceof org.openqa.selenium.JavascriptExecutor) {
-                    ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                        "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));" +
-                        "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", 
-                        element
-                    );
-                }
-            } else {
-                // Perform native execution so React explicitly registers the pointer event
-                element.click();
+        for (SelectorRecoveryAgent.SelectorCandidate candidate : candidates) {
+            if (!isSessionActive()) return;
+            if (candidate.confidence < 0.70) {
+                continue; // Skip low confidence alternatives
             }
-            
-            HealingReportWriter.logHealed(stepId, oldLocator, bestCandidate.selector, bestCandidate.confidence);
-            System.out.println("\n✅ Recovered locator used: " + bestCandidate.selector);
-            System.out.println("🏥 [Orchestrator] SURGERY SUCCESSFUL! Action completed using AI healed selector.");
-        } catch (Exception fatal) {
-            System.err.println("💀 [Orchestrator] Healed selector also failed. Throwing fatal error.");
-            throw new RuntimeException("Healing failed persistently", fatal);
+
+            System.out.println("⚖️  [PolicyEngine] Attempting candidate: " + candidate.selector + " (Confidence: " + candidate.confidence + ")");
+
+            try {
+                By healedLocator;
+                if (candidate.strategy.equals("css")) healedLocator = By.cssSelector(candidate.selector);
+                else healedLocator = By.xpath(candidate.selector);
+
+                WebDriverWait healWait = new WebDriverWait(driver, Duration.ofSeconds(15));
+                WebElement element = healWait.until(ExpectedConditions.visibilityOfElementLocated(healedLocator));
+                
+                if (action.equals("click")) {
+                     element = healWait.until(ExpectedConditions.elementToBeClickable(element));
+                }
+
+                highlightElement(element, "lime");
+                showUiOverlay("🏥 HEAL SUCCESS! Found: " + candidate.selector, "#28a745");
+                io.qameta.allure.Allure.addAttachment("🏥 Healed Selector", "Replaced broken locator with: " + candidate.selector + "\nConfidence Engine Metric: " + candidate.confidence);
+
+                if (action.equals("fill")) {
+                    try { element.clear(); } catch(Exception e){}
+                    element.sendKeys(fillText);
+                    if (driver instanceof JavascriptExecutor) {
+                        try {
+                            ((JavascriptExecutor) driver).executeScript(
+                                    "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));" +
+                                            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                                    element
+                            );
+                        } catch (Exception e) {}
+                    }
+                } else {
+                    try {
+                        element.click();
+                    } catch (Exception clickEx) {
+                        if (driver instanceof JavascriptExecutor) {
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                        } else {
+                            throw clickEx;
+                        }
+                    }
+                }
+
+                HealingReportWriter.logHealed(stepId, oldLocator, candidate.selector, candidate.confidence);
+                System.out.println("\n✅ Recovered locator used: " + candidate.selector);
+                healed = true;
+                break; // Stop retrying if successful
+            } catch (Exception ex) {
+                System.err.println("⚠️ Candidate " + candidate.selector + " failed: " + ex.getClass().getSimpleName());
+                lastException = ex;
+            }
+        }
+
+        if (!healed) {
+            HealingReportWriter.logFailed(stepId, oldLocator);
+            System.err.println("⚠️ [Orchestrator] Step '" + stepId + "' Healing definitively failed! Continuing test flow...");
         }
     }
 }

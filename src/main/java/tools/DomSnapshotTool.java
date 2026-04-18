@@ -21,16 +21,30 @@ public class DomSnapshotTool {
      *
      * @return Compact HTML string representation of the body
      */
+    private boolean isDriverActive() {
+        if (driver == null) return false;
+        try {
+            driver.getTitle();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public String captureCompactDom() {
-        if (driver instanceof JavascriptExecutor) {
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            // Simple approach: get outerHTML of body
-            // Real Agent framework should prune <style>, <script>, <svg>, etc.
-            String script = "return document.body.outerHTML;";
-            String rawHtml = (String)js.executeScript(script);
-            
-            // Limit length for baseline
-            return rawHtml.length() > 5000 ? rawHtml.substring(0, 5000) + "...[TRUNCATED]" : rawHtml;
+        if (!isDriverActive()) {
+            System.err.println("⚠️ [DomSnapshotTool] Driver session invalid, skipping DOM capture");
+            return "DOM Tree Unavailable - Session Closed";
+        }
+        try {
+            if (driver instanceof JavascriptExecutor) {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                String script = "return document.body.outerHTML;";
+                String rawHtml = (String)js.executeScript(script);
+                return rawHtml != null && rawHtml.length() > 5000 ? rawHtml.substring(0, 5000) + "...[TRUNCATED]" : rawHtml;
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ [DomSnapshotTool] Error capturing DOM: " + e.getMessage());
         }
         return "DOM Tree Unavailable";
     }

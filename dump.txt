@@ -1,12 +1,60 @@
 BUTTON class=rw-pill text=Cart 0
 BUTTON class=rw-btn rw-btn-ghost text=Sign out
-A class=rw-nav-item active text=Dashboard
-A class=rw-nav-item text=Products
+A class=rw-nav-item text=Dashboard
+A class=rw-nav-item active text=Products
 A class=rw-nav-item text=Cart
 A class=rw-nav-item text=Checkout
 A class=rw-nav-item text=Settings
-H2 class=rw-h2 text=Dashboard
-BUTTON class=rw-btn rw-btn-ghost text=Reorder widgets
-SECTION class=rw-panel  text=Today REVENUE US$12,450.75 ORDERS 86 REFUNDS 3
-SECTION class=rw-panel  text=Operations 5 shipments awaiting pickup 2 products 
-SECTION class=rw-panel  text=Activity Order #5033 confirmed New customer create
+H2 class=rw-h2 text=Products
+INPUT class=rw-input text=
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+SPAN class=rw-badge text=Limited
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+SPAN class=rw-badge text=Popular
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart
+SPAN class=rw-badge text=Bestseller
+A class=rw-btn rw-btn-ghost text=View
+BUTTON class=rw-btn rw-btn-primary text=Add to cart

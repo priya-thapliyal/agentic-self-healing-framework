@@ -1,7 +1,7 @@
 package e2e;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,40 +18,42 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import static org.testng.Assert.*;
 public class TempTest {
     @Test
     void runDump() throws Exception {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        options.addArguments("--incognito");
+        options.addArguments("--disable-features=PasswordManager");
+        options.addArguments("--disable-save-password-bubble");
+        options.addArguments("--disable-autofill");
         WebDriver driver = new ChromeDriver(options);
         
         try {
-            driver.get("https://retail-website-two.vercel.app/app/dashboard");
-            Thread.sleep(4000);
+            driver.get("https://retail-website-two.vercel.app/");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            
-            // Try to use JS to set value to trigger React
-            WebElement email = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='email']")));
+            WebElement email = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
             email.clear();
             email.sendKeys("test@demo.com");
             
-            WebElement pw = driver.findElement(By.xpath("//input[@type='password']"));
+            WebElement pw = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='password']")));
             pw.clear();
             pw.sendKeys("password123");
             
-            // Try clicking the button
-            WebElement btn = driver.findElement(By.xpath("//button[contains(., 'Sign in')]"));
+            WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@type='submit']")));
             btn.click();
             
-            Thread.sleep(6000); // Wait for page nav to Dashboard
+            wait.until(ExpectedConditions.urlContains("dashboard"));
             
             try {
-                // Now click Products
-                driver.findElement(By.xpath("//a[contains(., 'Products')]")).click();
-                Thread.sleep(3000);
-            } catch (Exception ignore) {}
+                WebElement productsNav = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href, 'products')]")));
+                productsNav.click();
+                wait.until(ExpectedConditions.urlContains("products"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             
             JavascriptExecutor js = (JavascriptExecutor) driver;
             String text = (String) js.executeScript(
