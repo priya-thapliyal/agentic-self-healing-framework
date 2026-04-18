@@ -1,0 +1,27 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+log/
+logs/
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Temporary Files
+*.tmp
+*.dump
+*.dumpstream
+
+# Generated Reports
+healing-report.md
+abort-screenshot.png
