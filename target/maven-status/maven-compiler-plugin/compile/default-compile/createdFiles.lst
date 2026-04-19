@@ -1,0 +1,5 @@
+tools/DomSnapshotTool.class
+agents/SelectorRecoveryAgent$SelectorCandidate.class
+agents/SelectorRecoveryAgent.class
+core/TestOrchestrator.class
+core/HealingReportWriter.class
