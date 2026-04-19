@@ -22,6 +22,9 @@ out/
 *.dump
 *.dumpstream
 
+# Dashboard Data
+dashboard-data/
+
 # Generated Reports
 healing-report.md
 abort-screenshot.png

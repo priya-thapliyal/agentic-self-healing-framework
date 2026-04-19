@@ -1,10 +1,15 @@
-name: Allure Reporting CI
+name: CI Self-Healing Test Suite
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -25,6 +30,17 @@ jobs:
       run: mvn test -Dtest=DashboardTest
       continue-on-error: true # Ensure reporting happens even if a test fails!
 
+    - name: Process Telemetry Data
+      run: python3 process_telemetry.py
+      env:
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_RUN_NUMBER: ${{ github.run_number }}
+        GITHUB_REF_NAME: ${{ github.ref_name }}
+        GITHUB_SHA: ${{ github.sha }}
+        GITHUB_WORKFLOW: ${{ github.workflow }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_EVENT_NAME: ${{ github.event_name }}
+
     - name: Install Allure CLI
       run: |
         sudo npm install -g allure-commandline --save-dev
@@ -33,9 +49,46 @@ jobs:
     - name: Generate Allure Report
       run: allure generate target/allure-results --clean -o target/allure-report
 
+    - name: Deploy to Dashboard Data Branch
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Save our new data
+        mkdir -p ../temp_dashboard_data
+        cp -r dashboard-data/* ../temp_dashboard_data/
+        
+        # Switch to dashboard-data branch
+        git fetch origin dashboard-data || true
+        if git show-ref --verify --quiet refs/remotes/origin/dashboard-data; then
+          git checkout dashboard-data
+        else
+          git checkout --orphan dashboard-data
+          git rm -rf .
+          echo "[]" > history.json
+        fi
+        
+        # Copy new data back
+        mkdir -p runs
+        cp -r ../temp_dashboard_data/* .
+        
+        # Add and commit
+        git add .
+        git commit -m "Update dashboard data: Run ${{ github.run_number }}"
+        git push origin dashboard-data
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Upload Allure Report Artifact
       uses: actions/upload-artifact@v3
       with:
         name: allure-report
         path: target/allure-report
         retention-days: 7
+
+    - name: Deploy Allure Report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./target/allure-report
+        publish_branch: gh-pages
