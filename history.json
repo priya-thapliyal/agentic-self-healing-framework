@@ -1,20 +1,20 @@
 [
   {
-    "runId": "24634303853",
-    "runNumber": "7",
+    "runId": "24634731820",
+    "runNumber": "9",
     "workflowName": "CI Self-Healing Test Suite",
     "repository": "priya-thapliyal/agentic-self-healing-framework",
     "branch": "main",
-    "commitSha": "faa6830499425eff24ca1eebfff5369c673ca86e",
+    "commitSha": "3f99e1da11fedd6cb3206bb1d2023a7087fb9144",
     "event": "push",
-    "generatedAt": "2026-04-19T16:57:35.649472Z",
-    "totalRuns": 5,
-    "totalTestsCompleted": 5,
+    "generatedAt": "2026-04-19T17:19:53.228911Z",
+    "totalRuns": 26,
+    "totalTestsCompleted": 26,
     "totalSelectorHeals": 0,
     "totalFlowHeals": 0,
     "totalFailures": 0,
     "estimatedTimeSaved": "0.0",
     "healSuccessRate": "100",
-    "file": "runs/24634303853.json"
+    "file": "runs/24634731820.json"
   }
 ]
