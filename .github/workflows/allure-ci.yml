@@ -57,11 +57,12 @@ jobs:
         # Save our new data
         mkdir -p ../temp_dashboard_data
         cp -r dashboard-data/* ../temp_dashboard_data/
+        rm -rf dashboard-data
         
         # Switch to dashboard-data branch
         git fetch origin dashboard-data || true
         if git show-ref --verify --quiet refs/remotes/origin/dashboard-data; then
-          git checkout dashboard-data
+          git checkout dashboard-data --
         else
           git checkout --orphan dashboard-data
           git rm -rf .
