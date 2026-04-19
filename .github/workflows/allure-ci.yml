@@ -41,6 +41,40 @@ jobs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_EVENT_NAME: ${{ github.event_name }}
 
+    - name: Generate CI Summary
+      run: |
+        python3 - <<'EOF'
+        import json, os
+
+        with open('dashboard-data/latest.json', 'r') as f:
+            d = json.load(f)
+
+        selector_heals = int(d.get('totalSelectorHeals', 0))
+        flow_heals     = int(d.get('totalFlowHeals', 0))
+        failures       = int(d.get('totalFailures', 0))
+        total_runs     = int(d.get('totalRuns', 0))
+
+        # estimatedTimeSaved is stored in minutes (0.5 min/heal); convert to hours
+        time_saved_mins = float(d.get('estimatedTimeSaved', 0))
+        time_saved_hours = round(time_saved_mins / 60, 4)
+
+        heal_rate = float(d.get('healSuccessRate', 0.0))
+
+        summary = {
+            "totalRuns":      total_runs,
+            "selectorHeals":  selector_heals,
+            "flowHeals":      flow_heals,
+            "failures":       failures,
+            "timeSavedHours": time_saved_hours,
+            "healRate":       heal_rate
+        }
+
+        with open('ci-summary.json', 'w') as f:
+            json.dump(summary, f, indent=2)
+
+        print("ci-summary.json written:", summary)
+        EOF
+
     - name: Install Allure CLI
       run: |
         sudo npm install -g allure-commandline --save-dev
@@ -93,3 +127,9 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./target/allure-report
         publish_branch: gh-pages
+
+    - name: Upload CI Summary
+      uses: actions/upload-artifact@v4
+      with:
+        name: ci-summary
+        path: ci-summary.json
