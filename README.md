@@ -94,3 +94,6 @@ The script completed successfully despite the broken selector!
 ==================================================
 ```
 *(Notice that Maven will report `BUILD SUCCESS` at the end, proving the script healed and naturally continued.)*
+
+
+CI/CD demo trigger
