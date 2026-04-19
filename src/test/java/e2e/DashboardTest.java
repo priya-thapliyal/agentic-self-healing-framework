@@ -112,7 +112,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("btn-legacy-cart-add-42"), "Add to Cart Button", "Test Case 5");
         Thread.sleep(1000);
     }
-    @Test(priority = 6, enabled = false)
+    @Test(priority = 6)
     @Description("Independent Optimized Execution of Step 6")
     public void test06_CartMenu() throws Exception {
         navigateTo("/app/products");
@@ -120,7 +120,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.cssSelector(".missing-cart-nav"), "Cart Menu", "Test Case 6");
         Thread.sleep(1000);
     }
-    @Test(priority = 7, enabled = false)
+    @Test(priority = 7)
     @Description("Independent Optimized Execution of Step 7")
     public void test07_CheckoutMenu() throws Exception {
         navigateTo("/app/cart");
@@ -128,7 +128,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("checkout-link-404"), "Checkout Menu", "Test Case 7");
         Thread.sleep(1000);
     }
-    @Test(priority = 8, enabled = false)
+    @Test(priority = 8)
     @Description("Independent Optimized Execution of Step 8")
     public void test08_SettingsMenu() throws Exception {
         navigateTo("/app/checkout");
@@ -136,7 +136,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.xpath("//nav/a[@href='broken-settings']"), "Settings Menu", "Test Case 8");
         Thread.sleep(1000);
     }
-    @Test(priority = 9, enabled = false)
+    @Test(priority = 9)
     @Description("Independent Optimized Execution of Step 9")
     public void test09_DashboardMenu() throws Exception {
         navigateTo("/app/settings");
@@ -144,7 +144,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.cssSelector("li.broken-dash"), "Dashboard Menu", "Test Case 9");
         Thread.sleep(1000);
     }
-    @Test(priority = 10, enabled = false)
+    @Test(priority = 10)
     @Description("Independent Optimized Execution of Step 10")
     public void test10_ReorderwidgetsButton() throws Exception {
         navigateTo("/app/dashboard");
@@ -152,7 +152,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("bad-widget-btn"), "Reorder widgets Button", "Test Case 10");
         Thread.sleep(1000);
     }
-    @Test(priority = 11, enabled = false)
+    @Test(priority = 11)
     @Description("Independent Optimized Execution of Step 11")
     public void test11_ProductsMenu() throws Exception {
         navigateTo("/app/dashboard");
@@ -160,7 +160,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.cssSelector("a.fail-products"), "Products Menu", "Test Case 11");
         Thread.sleep(1000);
     }
-    @Test(priority = 12, enabled = false)
+    @Test(priority = 12)
     @Description("Independent Optimized Execution of Step 12")
     public void test12_AddToCartButton() throws Exception {
         navigateTo("/app/products");
@@ -168,7 +168,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.xpath("//button[@data-test='missing']"), "Add To Cart Button", "Test Case 12");
         Thread.sleep(1000);
     }
-    @Test(priority = 13, enabled = false)
+    @Test(priority = 13)
     @Description("Independent Optimized Execution of Step 13")
     public void test13_CartMenu() throws Exception {
         navigateTo("/app/products");
@@ -176,7 +176,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("nav-cart-err"), "Cart Menu", "Test Case 13");
         Thread.sleep(1000);
     }
-    @Test(priority = 14, enabled = false)
+    @Test(priority = 14)
     @Description("Independent Optimized Execution of Step 14")
     public void test14_CheckoutMenu() throws Exception {
         navigateTo("/app/cart");
@@ -184,7 +184,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.cssSelector(".checkout-err"), "Checkout Menu", "Test Case 14");
         Thread.sleep(1000);
     }
-    @Test(priority = 15, enabled = false)
+    @Test(priority = 15)
     @Description("Independent Optimized Execution of Step 15")
     public void test15_SettingsMenu() throws Exception {
         navigateTo("/app/checkout");
@@ -192,7 +192,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.xpath("//a[@class='fail-setting']"), "Settings Menu", "Test Case 15");
         Thread.sleep(1000);
     }
-    @Test(priority = 16, enabled = false)
+    @Test(priority = 16)
     @Description("Independent Optimized Execution of Step 16")
     public void test16_DashboardMenu() throws Exception {
         navigateTo("/app/settings");
@@ -200,7 +200,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("dash-err"), "Dashboard Menu", "Test Case 16");
         Thread.sleep(1000);
     }
-    @Test(priority = 17, enabled = false)
+    @Test(priority = 17)
     @Description("Independent Optimized Execution of Step 17")
     public void test17_Orders() throws Exception {
         navigateTo("/app/dashboard");
@@ -208,7 +208,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.cssSelector(".broken-orders"), "Orders", "Test Case 17");
         Thread.sleep(1000);
     }
-    @Test(priority = 18, enabled = false)
+    @Test(priority = 18)
     @Description("Independent Optimized Execution of Step 18")
     public void test18_Activity() throws Exception {
         navigateTo("/app/dashboard");
@@ -216,7 +216,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("bad-activity"), "Activity", "Test Case 18");
         Thread.sleep(1000);
     }
-    @Test(priority = 19, enabled = false)
+    @Test(priority = 19)
     @Description("Independent Optimized Execution of Step 19")
     public void test19_Revenue() throws Exception {
         navigateTo("/app/dashboard");
@@ -224,7 +224,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.className("missing-revenue"), "Revenue", "Test Case 19");
         Thread.sleep(1000);
     }
-    @Test(priority = 20, enabled = false)
+    @Test(priority = 20)
     @Description("Independent Optimized Execution of Step 20")
     public void test20_Refunds() throws Exception {
         navigateTo("/app/dashboard");
@@ -232,7 +232,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("missing-refund"), "Refunds", "Test Case 20");
         Thread.sleep(1000);
     }
-    @Test(priority = 21, enabled = false)
+    @Test(priority = 21)
     @Description("Independent Optimized Execution of Step 21")
     public void test21_Operations() throws Exception {
         navigateTo("/app/dashboard");
@@ -240,7 +240,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.xpath("//*[@data-testid='ops']"), "Operations", "Test Case 21");
         Thread.sleep(1000);
     }
-    @Test(priority = 22, enabled = false)
+    @Test(priority = 22)
     @Description("Independent Optimized Execution of Step 22")
     public void test22_ProductsMenu() throws Exception {
         navigateTo("/app/dashboard");
@@ -248,7 +248,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.cssSelector(".missing-products"), "Products Menu", "Test Case 22");
         Thread.sleep(1000);
     }
-    @Test(priority = 23, enabled = false)
+    @Test(priority = 23)
     @Description("Independent Optimized Execution of Step 23")
     public void test23_AddToCartButton() throws Exception {
         navigateTo("/app/products");
@@ -256,7 +256,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.xpath("//button[@id='wrong-id']"), "Add To Cart Button", "Test Case 23");
         Thread.sleep(1000);
     }
-    @Test(priority = 24, enabled = false)
+    @Test(priority = 24)
     @Description("Independent Optimized Execution of Step 24")
     public void test24_DashboardMenu() throws Exception {
         navigateTo("/app/products");
@@ -264,7 +264,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("missing-dash-link"), "Dashboard Menu", "Test Case 23.5");
         Thread.sleep(1000);
     }
-    @Test(priority = 25, enabled = false)
+    @Test(priority = 25)
     @Description("Independent Optimized Execution of Step 25")
     public void test25_ReorderwidgetsButton() throws Exception {
         navigateTo("/app/dashboard");
@@ -272,7 +272,7 @@ public class DashboardTest {
         orchestrator.resilientClick(By.xpath("//button[@class='bad-reorder']"), "Reorder widgets Button", "Test Case 24");
         Thread.sleep(1000);
     }
-    @Test(priority = 26, enabled = false)
+    @Test(priority = 26)
     @Description("Independent Optimized Execution of Step 26")
     public void test26_SignoutButton() throws Exception {
         navigateTo("/app/dashboard");
