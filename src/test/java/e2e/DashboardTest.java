@@ -39,6 +39,9 @@ public class DashboardTest {
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--disable-gpu");
+            options.addArguments("--disable-extensions");
+            options.addArguments("--disable-setuid-sandbox");
+            options.addArguments("--remote-allow-origins=*");
             options.addArguments("--window-size=1920,1080");
         }
 
