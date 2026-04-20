@@ -123,7 +123,9 @@ jobs:
         # Save our new data
         mkdir -p ../temp_dashboard_data
         cp -r dashboard-data/* ../temp_dashboard_data/ 2>/dev/null || true
+        cp ci-summary.json ../temp_dashboard_data/ 2>/dev/null || true
         rm -rf dashboard-data
+        rm -f ci-summary.json
         
         # Switch to dashboard-data branch
         git fetch origin dashboard-data || true
@@ -138,6 +140,11 @@ jobs:
         # Copy new data back
         mkdir -p runs
         cp -r ../temp_dashboard_data/* . 2>/dev/null || true
+        
+        # Explicitly move ci-summary.json back if it exists in temp
+        if [ -f ../temp_dashboard_data/ci-summary.json ]; then
+          cp ../temp_dashboard_data/ci-summary.json .
+        fi
         
         # Add and commit
         git add .
