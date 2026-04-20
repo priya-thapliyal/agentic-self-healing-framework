@@ -26,10 +26,8 @@ jobs:
           google-chrome-stable \
           libnss3 \
           libxss1 \
-          libasound2 \
-          libgconf-2-4 \
+          libasound2t64 \
           fonts-liberation \
-          libappindicator1 \
           libgbm1 \
           libx11-6 \
           libxext6 \
