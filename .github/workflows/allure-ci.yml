@@ -19,15 +19,39 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install Google Chrome
+    - name: Install Google Chrome & System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y \
+          google-chrome-stable \
+          libnss3 \
+          libxss1 \
+          libasound2 \
+          libgconf-2-4 \
+          fonts-liberation \
+          libappindicator1 \
+          libgbm1 \
+          libx11-6 \
+          libxext6 \
+          libxrandr2 \
+          xdg-utils \
+          xvfb
 
-    - name: Verify Chrome Installation
+    - name: Run Chrome Diagnostics
       run: |
+        echo "=== Chrome Binary Check ==="
         which google-chrome-stable
         google-chrome-stable --version
+        
+        echo "=== System Resources ==="
+        free -h
+        df -h /dev/shm
+        
+        echo "=== Required Libraries ==="
+        ldd /usr/bin/google-chrome-stable | grep "not found" || echo "✓ All libraries found"
+        
+        echo "=== Chrome Dry Run Test ==="
+        timeout 5 google-chrome-stable --headless --disable-gpu --no-sandbox about:blank 2>&1 || true
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -37,8 +61,10 @@ jobs:
         cache: maven
 
     - name: Run Maven Tests
-      run: mvn test -Dtest=DashboardTest
-      continue-on-error: true # Ensure reporting happens even if a test fails!
+      run: mvn test -Dtest=DashboardTest -X
+      continue-on-error: true
+      env:
+        GITHUB_ACTIONS: "true"
 
     - name: Process Telemetry Data
       run: python3 process_telemetry.py
@@ -64,12 +90,10 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
-        # Save our new data
         mkdir -p ../temp_dashboard_data
-        cp -r dashboard-data/* ../temp_dashboard_data/
+        cp -r dashboard-data/* ../temp_dashboard_data/ 2>/dev/null || true
         rm -rf dashboard-data
         
-        # Switch to dashboard-data branch
         git fetch origin dashboard-data || true
         if git show-ref --verify --quiet refs/remotes/origin/dashboard-data; then
           git checkout dashboard-data --
@@ -79,13 +103,11 @@ jobs:
           echo "[]" > history.json
         fi
         
-        # Copy new data back
         mkdir -p runs
-        cp -r ../temp_dashboard_data/* .
+        cp -r ../temp_dashboard_data/* . 2>/dev/null || true
         
-        # Add and commit
         git add .
-        git commit -m "Update dashboard data: Run ${{ github.run_number }}"
+        git commit -m "Update dashboard data: Run ${{ github.run_number }}" || true
         git push origin dashboard-data
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
