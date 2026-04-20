@@ -1,0 +1,2 @@
+Replaced broken locator with: //a[contains(@href, 'checkout')]
+Confidence Engine Metric: 0.95
