@@ -1,0 +1,2 @@
+Replaced broken locator with: //input[contains(@placeholder, 'User') or translate(@placeholder, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='email' or @type='email' or translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='email']
+Confidence Engine Metric: 0.99
