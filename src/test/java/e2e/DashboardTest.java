@@ -31,13 +31,26 @@ public class DashboardTest {
     @BeforeMethod
     public void setupTest() {
         ChromeOptions options = new ChromeOptions();
+        
+        // CI/Headless Environment Optimization
+        String isCi = System.getenv("GITHUB_ACTIONS");
+        if ("true".equals(isCi)) {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--window-size=1920,1080");
+        }
+
         options.addArguments("--incognito");
         options.addArguments("--disable-features=PasswordManager");
         options.addArguments("--disable-save-password-bubble");
         options.addArguments("--disable-autofill");
         
         driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
+        if (!"true".equals(isCi)) {
+            driver.manage().window().maximize();
+        }
         orchestrator = new TestOrchestrator(driver, 3);
     }
 
