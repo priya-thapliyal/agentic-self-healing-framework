@@ -3,6 +3,7 @@ package e2e;
 import core.TestOrchestrator;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.testng.annotations.AfterMethod;
+import java.time.Duration;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,7 +26,9 @@ public class DashboardTest {
 
     @BeforeClass
     public void setupClass() {
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver()
+            .clearDriverCache()
+            .setup();
     }
 
     @BeforeMethod
@@ -51,6 +54,11 @@ public class DashboardTest {
         options.addArguments("--disable-autofill");
         
         driver = new ChromeDriver(options);
+        
+        // Set implicit waits and stability timeouts
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+
         if (!"true".equals(isCi)) {
             driver.manage().window().maximize();
         }

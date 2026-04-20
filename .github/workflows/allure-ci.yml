@@ -24,6 +24,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
 
+    - name: Verify Chrome Installation
+      run: |
+        which google-chrome-stable
+        google-chrome-stable --version
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
