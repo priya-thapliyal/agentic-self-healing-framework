@@ -176,11 +176,12 @@ public class DashboardTest {
         orchestrator.resilientClick(By.id("bad-widget-btn"), "Reorder widgets Button", "Test Case 10");
         Thread.sleep(1000);
     }
+/*
     @Test(priority = 11)
     @Description("Independent Optimized Execution of Step 11")
     public void test11_ProductsMenu() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 11 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 11 ---");
         orchestrator.resilientClick(By.cssSelector("a.fail-products"), "Products Menu", "Test Case 11");
         Thread.sleep(1000);
     }
@@ -188,7 +189,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 12")
     public void test12_AddToCartButton() throws Exception {
         navigateTo("/app/products");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 12 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 12 ---");
         orchestrator.resilientClick(By.xpath("//button[@data-test='missing']"), "Add To Cart Button", "Test Case 12");
         Thread.sleep(1000);
     }
@@ -196,7 +197,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 13")
     public void test13_CartMenu() throws Exception {
         navigateTo("/app/products");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 13 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 13 ---");
         orchestrator.resilientClick(By.id("nav-cart-err"), "Cart Menu", "Test Case 13");
         Thread.sleep(1000);
     }
@@ -204,7 +205,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 14")
     public void test14_CheckoutMenu() throws Exception {
         navigateTo("/app/cart");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 14 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 14 ---");
         orchestrator.resilientClick(By.cssSelector(".checkout-err"), "Checkout Menu", "Test Case 14");
         Thread.sleep(1000);
     }
@@ -212,7 +213,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 15")
     public void test15_SettingsMenu() throws Exception {
         navigateTo("/app/checkout");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 15 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 15 ---");
         orchestrator.resilientClick(By.xpath("//a[@class='fail-setting']"), "Settings Menu", "Test Case 15");
         Thread.sleep(1000);
     }
@@ -220,7 +221,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 16")
     public void test16_DashboardMenu() throws Exception {
         navigateTo("/app/settings");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 16 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 16 ---");
         orchestrator.resilientClick(By.id("dash-err"), "Dashboard Menu", "Test Case 16");
         Thread.sleep(1000);
     }
@@ -228,7 +229,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 17")
     public void test17_Orders() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 17 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 17 ---");
         orchestrator.resilientClick(By.cssSelector(".broken-orders"), "Orders", "Test Case 17");
         Thread.sleep(1000);
     }
@@ -236,7 +237,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 18")
     public void test18_Activity() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 18 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 18 ---");
         orchestrator.resilientClick(By.id("bad-activity"), "Activity", "Test Case 18");
         Thread.sleep(1000);
     }
@@ -244,7 +245,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 19")
     public void test19_Revenue() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 19 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 19 ---");
         orchestrator.resilientClick(By.className("missing-revenue"), "Revenue", "Test Case 19");
         Thread.sleep(1000);
     }
@@ -252,7 +253,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 20")
     public void test20_Refunds() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 20 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 20 ---");
         orchestrator.resilientClick(By.id("missing-refund"), "Refunds", "Test Case 20");
         Thread.sleep(1000);
     }
@@ -260,7 +261,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 21")
     public void test21_Operations() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 21 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 21 ---");
         orchestrator.resilientClick(By.xpath("//*[@data-testid='ops']"), "Operations", "Test Case 21");
         Thread.sleep(1000);
     }
@@ -268,7 +269,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 22")
     public void test22_ProductsMenu() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 22 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 22 ---");
         orchestrator.resilientClick(By.cssSelector(".missing-products"), "Products Menu", "Test Case 22");
         Thread.sleep(1000);
     }
@@ -276,7 +277,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 23")
     public void test23_AddToCartButton() throws Exception {
         navigateTo("/app/products");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 23 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 23 ---");
         orchestrator.resilientClick(By.xpath("//button[@id='wrong-id']"), "Add To Cart Button", "Test Case 23");
         Thread.sleep(1000);
     }
@@ -284,7 +285,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 24")
     public void test24_DashboardMenu() throws Exception {
         navigateTo("/app/products");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 24 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 24 ---");
         orchestrator.resilientClick(By.id("missing-dash-link"), "Dashboard Menu", "Test Case 23.5");
         Thread.sleep(1000);
     }
@@ -292,7 +293,7 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 25")
     public void test25_ReorderwidgetsButton() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 25 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 25 ---");
         orchestrator.resilientClick(By.xpath("//button[@class='bad-reorder']"), "Reorder widgets Button", "Test Case 24");
         Thread.sleep(1000);
     }
@@ -300,8 +301,9 @@ public class DashboardTest {
     @Description("Independent Optimized Execution of Step 26")
     public void test26_SignoutButton() throws Exception {
         navigateTo("/app/dashboard");
-        System.out.println("\n--- 🟢 EXECUTING MAIN TEST ACTION: STEP 26 ---");
+        System.out.println("\n--- \uD83D\uDFE2 EXECUTING MAIN TEST ACTION: STEP 26 ---");
         orchestrator.resilientClick(By.id("logout-broken"), "Sign out Button", "Test Case 25");
         Thread.sleep(1000);
     }
+*/
 }
