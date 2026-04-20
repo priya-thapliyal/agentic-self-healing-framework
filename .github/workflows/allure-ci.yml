@@ -75,6 +75,38 @@ jobs:
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_EVENT_NAME: ${{ github.event_name }}
 
+    - name: Generate CI Summary
+      run: |
+        python3 - <<'EOF'
+        import json, os
+        try:
+            with open('dashboard-data/latest.json', 'r') as f:
+                d = json.load(f)
+            selector_heals = int(d.get('totalSelectorHeals', 0))
+            flow_heals     = int(d.get('totalFlowHeals', 0))
+            failures       = int(d.get('totalFailures', 0))
+            total_runs     = int(d.get('totalRuns', 0))
+            # estimatedTimeSaved is stored in minutes; convert to hours
+            time_saved_mins = float(d.get('estimatedTimeSaved', 0))
+            time_saved_hours = round(time_saved_mins / 60, 4)
+            heal_rate = float(d.get('healSuccessRate', 0.0))
+            summary = {
+                "totalRuns":      total_runs,
+                "selectorHeals":  selector_heals,
+                "flowHeals":      flow_heals,
+                "failures":       failures,
+                "timeSavedHours": time_saved_hours,
+                "healRate":       heal_rate
+            }
+            with open('ci-summary.json', 'w') as f:
+                json.dump(summary, f, indent=2)
+            print("ci-summary.json written:", summary)
+        except Exception as e:
+            print(f"Error generating summary: {e}")
+            with open('ci-summary.json', 'w') as f:
+                json.dump({"error": str(e)}, f)
+        EOF
+
     - name: Install Allure CLI
       run: |
         sudo npm install -g allure-commandline --save-dev
@@ -88,10 +120,12 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
+        # Save our new data
         mkdir -p ../temp_dashboard_data
         cp -r dashboard-data/* ../temp_dashboard_data/ 2>/dev/null || true
         rm -rf dashboard-data
         
+        # Switch to dashboard-data branch
         git fetch origin dashboard-data || true
         if git show-ref --verify --quiet refs/remotes/origin/dashboard-data; then
           git checkout dashboard-data --
@@ -101,14 +135,25 @@ jobs:
           echo "[]" > history.json
         fi
         
+        # Copy new data back
         mkdir -p runs
         cp -r ../temp_dashboard_data/* . 2>/dev/null || true
         
+        # Add and commit
         git add .
         git commit -m "Update dashboard data: Run ${{ github.run_number }}" || true
+        
+        # Fix 403: Use token in the remote URL for push operations
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         git push origin dashboard-data
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload CI Summary
+      uses: actions/upload-artifact@v4
+      with:
+        name: ci-summary
+        path: ci-summary.json
 
     - name: Upload Allure Report Artifact
       uses: actions/upload-artifact@v4
