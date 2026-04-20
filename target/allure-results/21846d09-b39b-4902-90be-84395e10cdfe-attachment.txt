@@ -1,0 +1,2 @@
+Replaced broken locator with: //*[@id='activity' or @id='activity']
+Confidence Engine Metric: 0.99

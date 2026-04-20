@@ -1,0 +1,2 @@
+Replaced broken locator with: //*[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'refunds') and not(self::script) and not(self::style)]
+Confidence Engine Metric: 0.85
