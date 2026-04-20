@@ -1,0 +1,6 @@
+#surefire_0
+#Mon Apr 20 05:33:17 UTC 2026
+basedir=/home/runner/work/agentic-self-healing-framework/agentic-self-healing-framework
+test=DashboardTest
+allure.results.directory=/home/runner/work/agentic-self-healing-framework/agentic-self-healing-framework/target/allure-results
+localRepository=/home/runner/.m2/repository
