@@ -1,0 +1,5 @@
+<body>
+    <div id="root"><div class="rw-auth"><div class="rw-auth-card"><div class="rw-auth-brand"><div class="rw-logo">N</div><div><div class="rw-title">Nova Retail</div><div class="rw-subtitle">Sign in to your workspace</div></div></div><form class="rw-form"><label>Email<input required="" type="email" value="test@demo.com" name="email"></label><label>Password<input required="" type="password" value="password123" name="password"></label><button class="rw-btn rw-btn-primary">Sign in</button></form><div class="rw-auth-footer">Demo: customer <strong>test@demo.com</strong> / <strong>password123</strong> · admin <strong>admin@demo.com</strong> / <strong>admin123</strong></div></div></div></div>
+  
+
+<div id="ai-healer-overlay" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 15px 30px; z-index: 999999; font-size: 20px; font-weight: bold; border-radius: 10px; color: rgb(255, 255, 255); box-shadow: rgba(0, 0, 0, 0.5) 0px 10px 30px; font-family: monospace; background-color: rgb(204, 0, 0);">❌ Locator Broken! Initiating AI Healing...</div></body>
